@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IzTest by Kravchinska</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+             <form autocomplete="off" action="#" id="search_form">
+                <label for="mySearch">Search:</label>
+                <div class="autocomplete">
+                     <!-- <label for="myInput">Search:</label> -->
+                    <input id="mySearch" type="text" name="myName" placeholder="Start to write">
+                    <!-- <button id='myBtn'>Search</button> -->
+                </div>
+                <!-- <input type="submit"> -->
+             </form>
+             <div>
+                 <h2><span id="count">0</span> matches found.</h2>
+             </div>
+        </nav>
+        <div id="table">
+            <div class='row' id="row1">
+                <div class='id'>Number</div>
+                <div class="name">Name</div>
+                <div class="email">email</div>
+                <div class="funds">funds</div>
+                <div class="city">city</div>
+                <div class="phone">phone</div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/tableGenerator.js"></script>
+    
+</body>
+</html>
