@@ -5,6 +5,9 @@
 body{
 
 }
+textarea{
+    border-radius: 4px;
+}
 .container{
     width: 80%;
     margin: 0 auto;
@@ -20,24 +23,23 @@ nav{
 }
 #table{
     flex-grow: 9;
-    /* margin: 0 auto; */
-    /* width: 100%; */
     border: 1px solid rgb(54, 100, 33);
-    /* background-color: darkorchid; */
 }
+
 .row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
-    /* border: 1px solid black; */
-    /* height: 20px; */
     margin: 2px;
 }
-.row > div{
-    /* flex-grow: 1; */
-    width: 15%;
-    border: 1px solid black;
+#row1{
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-grow: 6;
+}
+.funds{
+    display: none;
 }
 .id{
     width: 10%;
