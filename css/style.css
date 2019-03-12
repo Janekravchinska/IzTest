@@ -38,9 +38,6 @@ nav{
     justify-content: space-between;
     flex-grow: 6;
 }
-.funds{
-    display: none;
-}
 .id{
     width: 10%;
 }

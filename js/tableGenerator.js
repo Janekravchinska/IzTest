@@ -9,7 +9,6 @@ let offset = 0;
 window.onload = () => {
   loadUsersTable();
   loadSearchListener();
-  alert('Page loaded');
 };
 
 async function loadSearchListener() {
@@ -19,20 +18,18 @@ async function loadSearchListener() {
   input.addEventListener("keyup", async event => {
     event.preventDefault()
     if (event.keyCode === 13) {
-  
+
       wraper = document.getElementById("wraper");
       wraper.remove();
       _wraperMade();
       await searchUsers(input.value);
-      // document.getElementById("myBtn").click();
-
     }
   });
 }
 
 async function loadUsersTable() {
   _wraperMade();
-  const response = await axios.get(`${serverAdress}/`);
+  const response = await axios.get(`${serverAdress}/?limit=10000`);
   const dataList = response.data.data;
   const currentPage = dataList.slice(offset, offset + limit);
   for (const element of currentPage) {
@@ -40,11 +37,11 @@ async function loadUsersTable() {
 
     let elem = document.getElementById(`id${element.id}`);
 
-    elem.onclick = async event => {
-      await updateUser(element);
-      //update page
-    }
+    elem.onclick = async event => await updateUser(_userData(element));
   }
+
+  let countSpan = document.getElementById('count');
+  countSpan.innerHTML = dataList.length;
 }
 
 
@@ -59,32 +56,29 @@ async function searchUsers(val) {
     ...responseEmails.data.data,
     ...responsePhones.data.data]
     .sort((a, b) => a.id - b.id);
-  const count = Number(responseCities.data.count+responseNames.data.count+responsePhones.data.count+responseEmails.data.count);
+  const count = Number(
+    responseCities.data.count + 
+    responseNames.data.count + 
+    responsePhones.data.count + 
+    responseEmails.data.count);
 
   const dataListHash = {};
+  const dataListFiltered = []
   for (const obj of datalist) {
     if (dataListHash[obj.id] === undefined) {
       dataListHash[obj.id] = true;
+      dataListFiltered.push(obj);
       _tableRow(obj);
     }
   }
+
+
   let countSpan = document.getElementById('count');
   countSpan.innerHTML = count;
 }
 
 async function updateUser(userData) {
-  try {
-    await axios.put(`${serverAdress}/update/${userData.id}`, {
-      name: userData.name,
-      email: userData.email,
-      funds: userData.funds,
-      city: userData.city,
-      phone: userData.phone
-    });
-    console.log('User data updated succesfully');
-  } catch (e) {
-    console.log(e.massage);
-  }
+  await axios.put(`${serverAdress}/update/${userData.id}`, userData);
 }
 
 function _wraperMade() {
@@ -97,27 +91,39 @@ function _wraperMade() {
 function _tableRow(obj) {
 
   const row = document.createElement('form');
-  row.setAttribute('class', 'row')
-  row.setAttribute('metod', 'post')
+  row.setAttribute('class', 'row');
+  row.addEventListener('submit', async e => e.preventDefault());
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const sell = document.createElement('textarea');
-      sell.setAttribute('class', key);
-      sell.innerHTML = obj[key];
-      row.appendChild(sell);
+      if(key !== 'id') {
+        sell.setAttribute('id', `${key}-${obj.id}`);
+        sell.innerHTML = obj[key];
+        row.appendChild(sell);
+
+      }
     }
   }
-  
+
   const button = document.createElement('input');
   button.innerHTML = 'Change';
   button.setAttribute('id', `id${obj.id}`);
   button.setAttribute('type', 'submit');
+
+  button.onclick = async event => await updateUser(_userData(obj));
   row.appendChild(button);
   const wraper = document.getElementById("wraper");
   wraper.appendChild(row);
-
-
 };
 
-
+function _userData(obj) {
+  return {
+    name: document.getElementById(`name-${obj.id}`).value,
+    email: document.getElementById(`email-${obj.id}`).value,
+    funds: document.getElementById(`funds-${obj.id}`).value,
+    city: document.getElementById(`city-${obj.id}`).value,
+    phone: document.getElementById(`phone-${obj.id}`).value,
+    id: obj.id,
+  }
+}
